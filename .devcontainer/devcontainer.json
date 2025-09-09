@@ -1,0 +1,25 @@
+{
+    "name": "VSCode Dev Container",
+    "dockerComposeFile": "./docker-compose.yml",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "eamodio.gitlens",
+                "EditorConfig.EditorConfig",
+                "github.copilot",
+                "github.copilot-chat",
+                "gruntfuggly.todo-tree",
+                "medo64.render-crlf",
+                "mhutchie.git-graph",
+                "ms-ceintl.vscode-language-pack-ja",
+                "ms-vscode.extension-test-runner",
+                "oderwat.indent-rainbow",
+                "AlexShen.classdiagram-ts"
+            ],
+            "settings": {}
+        }
+    },
+    "service": "vscode-multi-search",
+    "workspaceFolder": "/app"
+}

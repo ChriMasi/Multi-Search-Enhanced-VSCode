@@ -1,0 +1,135 @@
+body {
+    background-color: transparent;
+}
+
+
+/* =============================================================================================== */
+.search-box {
+    width: 100%;
+    display: flex;
+}
+
+.search-setting {
+    width: auto;
+    border-left: 1.5px rgb(84, 84, 84) solid;
+  /*  margin-left: 50%; */
+    /* 青 */
+    /* background-color: var(--vscode-button-background); */
+    /* 黒 */
+    /* background-color: var(--vscode-input-background); */
+}
+
+.delete-button {
+    background-color: black;
+    margin-right: 5%;
+}
+
+/* ! 検索結果 */
+.result-box {
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    /* 親要素の幅を子要素に合わせる */
+    width: fit-content;
+}
+
+/* ** 件数表示 */
+.result-count {
+    font-size: 1em;
+    color: var(--vscode-input-foreground);
+    display: flex;
+    /* テキストを中央に配置 */
+    justify-content: center;
+    width: 3em;
+}
+
+/* ** 移動ボタン(全体) */
+.move-buttons {
+    display: flex;
+    width: 100%;
+    /* 親要素の幅に合わせる */
+}
+
+/* ** 移動ボタン(個別) */
+.move-button {
+    flex: 1;
+    /* ボタンを均等に配置 */
+    background-color: var(--vscode-input-background);
+    /* ボタンの高さを調整 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+   /* height: 2rem;
+    margin-top: 5%;
+    margin-bottom: 5%;*/
+    border-left: 1.5px rgb(84, 84, 84) solid;
+    
+}
+.move-button button {
+    margin-right: 5%;
+}
+
+/* 検索履歴全体 */
+.total-result {
+    display: flex;
+    /* 子要素を左右に配置 */
+    justify-content: space-between;
+    align-items: center;
+    /* grid-auto-columns: 1fr; */
+    /* grid-auto-flow: column; */
+    /*gap: 1rem;*/
+    /* width: 100%; */
+}
+
+.total-result button + button{
+    border-left: 1.5px rgb(84, 84, 84) solid;
+}
+
+/* =============================================================================================== */
+.color-list {
+    list-style: none;
+    padding: 0;
+}
+
+.color-entry {
+    width: 100%;
+    display: flex;
+    margin-bottom: 0.4em;
+    border: 1px solid var(--vscode-input-border);
+}
+
+.color-preview {
+    width: 2em;
+    /* height: 2em; */
+    background: transparent;
+}
+
+/* Make color picker fill the preview box */
+.color-preview input[type="color"] {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: none;
+   /* background: transparent; */
+}
+
+.color-preview:hover {
+    outline: inset white;
+}
+
+.color-input {
+    display: block;
+    flex: 1;
+    width: 100%;
+    color: var(--vscode-input-foreground);
+    background-color: var(--vscode-input-background);
+    border: none;
+    padding: 0 0.6em;
+}
+
+.add-color-button {
+    display: block;
+    border: none;
+    margin: 0 auto;
+}

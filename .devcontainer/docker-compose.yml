@@ -1,0 +1,12 @@
+version: '3'
+services:
+  vscode-multi-search:
+    image: registry.gitlab.com/mayonnaize_group/vscode_extensions/vscode-multi-search:latest
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    volumes:
+      - ${HOME}/.ssh:/home/node/.ssh
+      - ../:/app
+    working_dir: /app
+    tty: true

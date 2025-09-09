@@ -1,0 +1,25 @@
+# Exclude Node modules (VSCE include solo dependencies)
+node_modules/
+
+# TypeScript source files
+src/
+*.ts
+
+# Test files
+test/
+*.spec.ts
+
+# Map files and logs
+*.map
+*.log
+
+# VS Code workspace settings
+.vscode/
+
+# Includi anche la cartella img e tutto il suo contenuto
+!img/
+!img/**
+
+# Git files
+.git/
+.gitignore

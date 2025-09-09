@@ -1,0 +1,110 @@
+stages:
+    - docker-build
+    - version-check
+    - publish-to-vscode
+
+# プッシュ時にDockerfileに変更があればDockerイメージの更新
+docker-build:
+    stage: docker-build
+    rules:
+        - changes:
+            - .devcontainer/Dockerfile
+    image: docker:20.10.16
+    services:
+        - docker:20.10.16-dind
+    variables:
+        IMAGE_TAG: latest
+    script:
+        - export IMAGE_TAG=latest;
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker build -t $CI_REGISTRY_IMAGE:$IMAGE_TAG .devcontainer/
+        - docker push $CI_REGISTRY_IMAGE:$IMAGE_TAG
+        - echo $CI_REGISTRY_IMAGE:$IMAGE_TAG
+
+# mainへのマージ(リクエスト)時にpackage.jsonのバージョンの確認
+version-check:
+    stage: version-check
+    rules:
+        - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+    image: $CI_REGISTRY_IMAGE:latest
+    before_script:
+        - sudo apt-get -qq update
+        - sudo apt-get install -y git jq
+        - npm install
+    script:
+        # 拡張機能の情報の取得
+        - publisher=$(jq -r .publisher package.json)
+        - extension_name=$(jq -r .name package.json)
+        # 発行済みのバージョンを取得
+        - vsce show $publisher.$extension_name --json > extension_info.json
+        - version=$(jq -r .versions[0].version extension_info.json)
+        - IFS='.' read -ra PREV_VER <<< $version
+        # バージョンの比較
+        - version=$(cat package.json | jq .version | tr -d '"')
+        - IFS='.' read -ra CUR_VER <<< $version
+        - result=false
+        - for i in 0 1 2; do
+        -   if [ ${CUR_VER[$i]} -gt ${PREV_VER[$i]} ]; then
+        -     result=true
+        -     break
+        -   fi
+        - done
+        - echo $result
+        - if "${result}"; then
+        -   exit 0
+        - else
+        -   exit -1
+        - fi
+
+# デバッグ設定でないことを確認する
+debug-check:
+    stage: version-check
+    allow_failure: true
+    rules:
+        - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+    script:
+        # extension.ts内でconst DEBUG = false;であることを確認
+        - grep -q "const DEBUG = false;" src/extension.ts
+
+# package.json内でdevDependenciesにvscodeがあるのかを確認する
+packagejson-check:
+    stage: version-check
+    allow_failure: true
+    rules:
+        - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+    before_script:
+        - apt-get -qq update
+        - apt-get install -y jq
+    script:
+        - if jq -e '.devDependencies.vscode' package.json > /dev/null; then
+        -   echo "vscode is listed in devDependencies."
+        -   exit 0
+        - else
+        -   echo "vscode is not listed in devDependencies."
+        -   exit -1
+        - fi
+
+# Pagesに仕様を発行する
+pages:
+    stage: publish-to-vscode
+    image: $CI_REGISTRY_IMAGE:latest
+    rules:
+        - if: '$CI_COMMIT_BRANCH == "main"'
+    before_script:
+        - mkdir -p public/
+        - npm install
+    script:
+        - npm run typedoc
+    artifacts:
+        paths:
+            - public
+
+publish-to-vscode:
+    stage: publish-to-vscode
+    image: $CI_REGISTRY_IMAGE:latest
+    rules:
+        - if: '$CI_COMMIT_BRANCH == "main"'
+    before_script:
+        - npm install
+    script:
+        - vsce publish -p $VSCE_PAT

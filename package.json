@@ -1,0 +1,58 @@
+{
+    "name": "multiple-search",
+    "displayName": "Multiple Search Enhanced",
+    "description": "You can see multiple searching results at once.",
+    "version": "0.1.0",
+    "publisher": "Chri-Masi",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ChriMasi/Multi-Search-Enhanced-VSCode"
+    },
+    "private": true,
+    "license": "MIT",
+    "engines": {
+        "vscode": "^1.93.0"
+    },
+    "extensionKind": [
+        "ui",
+        "workspace"
+    ],
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [],
+    "main": "./out/extension.js",
+    "contributes": {
+        "views": {
+            "explorer": [
+                {
+                    "type": "webview",
+                    "id": "MultipleSearch.search",
+                    "name": "Multiple Search"
+                }
+            ]
+        },
+        "commands": []
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "lint": "eslint \"src/**/*.ts\"",
+        "watch": "tsc -w -p ./",
+        "typedoc": "npx typedoc --out ./public/ ./src/ --entryPointStrategy expand"
+    },
+    "dependencies": {
+        "@types/node": "^20.10.2",
+        "@typescript-eslint/eslint-plugin": "^5.48.2",
+        "@typescript-eslint/parser": "^5.48.2",
+        "@vscode/codicons": "0.0.20",
+        "@vscode/test-electron": "^2.3.9",
+        "eslint": "^8.32.0",
+        "typescript": "^5.1.3"
+    },
+    "devDependencies": {
+        "typedoc": "^0.26.8",
+        "@types/vscode": "^1.93.0",
+        "vscode": "^1.1.37"
+    }
+}
